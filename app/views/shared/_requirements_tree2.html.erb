@@ -1,0 +1,28 @@
+<% # this partial should take a local of requirements for its level in the tree  %>
+
+<% requirements.each do |requirement| %>
+
+  <% if requirement.is_group? %>
+    <li class="li_folder" id="requirement_<%= requirement.id %>">
+      <i class="icon folder-open larger"></i>
+      <%= requirement.text_brief %>
+      <%# link_to requirement.text_brief,
+                  customization_requirement_path(@customization, requirement_id: requirement.id, node_type: 'group') %>
+      <ul>
+        <%= render partial: 'shared/requirements_tree2', locals: {requirements: requirement.children} %>
+      </ul>
+    </li>
+  <% else %>
+    <li class="li_requirement<%= (requirement.id.to_s == params[:requirement_id] ? ' current' : '') %>" id="requirement_<%= requirement.id %>">
+      <i class="icon requirement"></i>
+      <% if requirement.id.to_s == params[:requirement_id] %>
+        <%= requirement.text_brief %>
+      <% else %>
+        <%= link_to requirement.text_brief,
+                    customization_requirement_path(@customization, requirement_id: requirement.id, node_type: 'requirement'),
+                    {class: 'requirement_direct_link'}
+        %>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>

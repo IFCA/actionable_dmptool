@@ -1,0 +1,43 @@
+	<% @title_text = "Resource Template Details" %>
+  <% @display_menu = "customizations" %>
+  <h1 class="row-fluid"><span class="icon resource-template"></span>Resource Template Details</h1>
+  <div class="details span4">
+    <div class="template-outline border-box">
+      <p><strong>Selected DMP Template</strong></p>
+      <p><%#= link_to @resource.name, edit_resource_path(@resource) %></p>
+      <hr/>
+      <div id="requirements_tree">
+        <%#= render partial: 'requirements_tree', locals: { requirements: @requirements } %>
+      </div>
+    </div>
+  </div>
+  <div class="tabbable span8">
+  	<ul class="nav nav-tabs">
+  		<li class="active"><%= link_to 'Customizations', '#tab1', :data => {:toggle => 'tab'} %></li>
+  	</ul>
+  	<div class="tab-content">
+  		<div class="tab-pane active">
+
+<!--   TO BE MODIFIED as per latest wireframes -->
+  <table>
+    <thead>
+      <tr>
+        <th>Label</th>
+<!--         <th>Value</th>
+        <th>Text</th> -->
+      </tr>
+    </thead>
+    <tbody>
+    <% @resources.each do |resource| %>
+      <tr>
+        <td><%= resource.label %></td>
+        <td><%#= resource.value %></td>
+        <td><%#= resource.text %></td>
+      </tr>
+    <% end %>
+    <tbody>
+  </table>
+    		<%= link_to 'Add New Resource', new_resource_path, id: 'add_new_resource', :class => 'btn btn-green' %>
+    	</div>
+  	</div>
+  </div>

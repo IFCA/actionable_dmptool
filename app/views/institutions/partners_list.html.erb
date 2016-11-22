@@ -1,0 +1,77 @@
+<h1 class="row-fluid"><span class="icon institution-profile"></span>Partner Institutions</h1>
+<br/>
+<div class="row-fluid">
+  <p>Partner institutions can configure the tool to point to their
+    resources and services, provide customized help, and provide
+    suggested answers to the questions asked by funding agencies.
+    DMPTool users affiliated with partner institutions can login with
+    their own institutional accounts. For more information see
+    <%= link_to "About Partners", partners_path, :title => "About Partners" %>.
+  </p>
+  <p>Use the A-Z links below to narrow down the list by institution or
+    use the search box to search for specific institutions.</p>
+</div>
+<br/>
+<div class="row-fluid">
+	<div class="span8">
+		<%= link_to('A - F', { :s => 'a', :e => 'f' , :all_scope => @all_scope}, :class => 'btn viewA-F') %> 
+		<%= link_to('G - L', { :s => 'g', :e => 'l' , :all_scope => @all_scope}, :class => 'btn viewG-L') %> 
+		<%= link_to('M - S', { :s => 'm', :e => 's' , :all_scope => @all_scope}, :class => 'btn viewM-S') %> 
+		<%= link_to('T - Z', { :s => 't', :e => 'z' , :all_scope => @all_scope}, :class => 'btn viewT-Z') %> 
+		<%= link_to('All', { :s => 'a', :e => 'z' , :all_scope => @all_scope}, :class => 'btn viewA-Z') %>
+	</div>
+	<div class="search-area span4 pull-right">
+			<%= form_tag('', {:method => :get}) do %>
+				<div class="control-group pull-right">
+					<%= search_field_tag(:q, params[:q], :class => 'input-large') %>
+					<%= label_tag :q, "Search", :class => "icon search" %>
+					<%= submit_tag('Search') %>
+				</div>
+			<% end %>
+	</div>
+</div>
+<table class="table table-striped">
+	<thead>
+	  <tr>
+	    <th class="span10">Name</th>
+	    <th class="span1">Shibboleth enabled?</th>
+	    <th class="span1">DMPTool Customized?</th>
+	  </tr>
+	</thead>
+	<tbody>
+  <% @institutions.each do |institution| %>
+    <tr>
+      <!-- <td><%#= link_to institution.full_name, edit_institution_path(institution) %></td> -->
+      <td><%= institution.full_name%></td>
+      <td class="span1"><% if institution.is_shibboleth? then %>
+        <span class="icon confirm"></span>
+      <% else %>
+        
+      <% end %></td>
+      <td class="span1"><% if institution.is_customized? then %>
+        <span class="icon confirm"></span>
+      <% else %>
+        
+      <% end %></td>
+    </tr>
+  <% end %>
+	</tbody>
+</table>
+
+
+<% if @all_scope == "all" %>
+	<div class="buttons pagination">
+		<%= link_to("View Less", {:action => "partners_list", :all_scope => "", :q => @q, :s => @s, :e => @e},
+              {:class => "btn"})%>
+		<%= paginate @institutions %>
+	</div>
+<% else %>
+	<div class="buttons pagination">
+		<%= link_to("View All", {:action => "partners_list", :all_scope => "all", :q => @q, :s => @s, :e => @e},
+              {:class => "btn"})%>
+		<%= paginate @institutions %>
+	</div>
+<%end%>
+
+
+

@@ -1,0 +1,40 @@
+<% @title_text = "Create New DMP" %>
+<% @display_menu = "plans" %>
+<h1 class="row-fluid"><span class="icon new-template"></span>Create New DMP</h1>
+<div class="dmptool-page row-fluid">
+	<div class="span6">
+		<h2>Start with a DMP Template</h2>
+		<p>To create a new DMP, select a funder or institutional template.</p>
+		<%= button_to "Select Template >>", select_dmp_template_path, :method => :get, :class => "btn" %>
+	</div>
+	<div class="span6">
+		<h2>Copy an Existing DMP</h2>
+		<p>The existing DMPs in this list are either publicly shared by any user, shared within your institution by other DMP creators, or are plans that you have previously created.</p>
+		<p>Select an existing DMP below and add text to the template.</p>
+		<%= form_tag copy_existing_plans_template_path, method: :get do %>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th class="span1"></th>
+						<th>Name</th>
+						<th>Owner</th>
+						</tr>
+					</thead>
+				<tbody>
+				<% @plans.each do |plan| %>
+					<tr>
+						<td class="span1"><%= radio_button_tag :plan,  plan.id, checked: false %></td>
+						<!-- <th> tag below added in place of <td> for accessibility -->
+						<th scope="row"><%= label_tag "plan_#{plan.id}", plan.name %></th>
+						<td><%= owner_name(plan)%></td>
+					</tr>
+				<% end %>
+				</tbody>
+			</table>
+			<div class="buttons pagination">
+				<%= paginate @plans %>
+			</div>
+			<%= submit_tag "Copy this DMP >>", :class => "btn" %>
+		<% end %>
+	</div>
+</div>

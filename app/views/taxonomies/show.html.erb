@@ -1,0 +1,76 @@
+<% @display_menu = "taxonomies" %>
+<%= link_to 'Back', taxonomies_path %>
+
+
+<br>
+<br>
+<p><b>Name:</b></p>
+
+<p><%= @taxonomy.name %></p>
+
+<p><b>Description:</b></p>
+	
+<p><%= @taxonomy.description %></p>
+
+<p><b>Namespace:</b></p>
+
+<p><%= @taxonomy.namespace %></p>
+
+<p><b>Preferred label:</b></p>
+
+<p><%= @taxonomy.prefLabel %></p>
+
+<p><b>Property:</b></p>
+
+<p><%= @taxonomy.property %></p>
+
+<p><b>URL:</b></p>
+
+<p><a href="<%= @taxonomy.url %>" target="_blank"><%= @taxonomy.url %></a></p>
+
+<p><b>Taxonomy:</b></p>
+
+
+<div id="taxonomyTree">
+  <%= render partial: 'tree_level', :locals => { :children => @conceptTree } %>
+</div>
+
+<!--TODO Hacer algo al seleccionar que no afecte fuera-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#taxonomyTree").jstree({
+            "plugins" : ["themes", "html_data", "types"],
+            'types': {
+                'types' : {
+                    'file' : {
+                        'icon' : {
+                            'image' : '/assets/Green-tag-icon.png'
+                        }
+                    },
+                    'default' : {
+                        'icon' : {
+                            'image' : '/assets/Green-tag-icon.png'
+                        },
+                        'valid_children' : 'default'
+                    }
+                }
+            }
+        });
+    });
+    $(document).ready(function() {
+        setTimeout(function() {
+            //alert('timed out');
+            $('#taxonomyTree a').click(function(event) {
+                event.preventDefault();
+            });
+        }, 2000);
+    });
+
+</script>
+
+
+<p>
+<%= link_to 'Back', taxonomies_path %>
+</p>
+
+

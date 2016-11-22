@@ -1,0 +1,39 @@
+<% @title_text = "Customization Details" %>
+<% @display_menu = "customizations:details" %>
+<h1 class="row-fluid" id="jump"><span class="icon template-details"></span>Customization Details</h1>
+<h2><%= @requirements_template.name %></h2>
+<div class="dmptool-page row-fluid">
+  <div class="details span4">
+    <div class="tree-view border-box">
+      <p><strong>Template Outline</strong></p>
+      <hr/>
+      <div class="customization_tree">
+        <ul>
+          <%= render partial: 'shared/requirements_tree2', locals: { requirements: @requirements.roots } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="tabbable span8">
+    <ul class="nav nav-tabs">
+      <% @tabs.each_with_index do |tab, index| %>
+        <li class="<%= (index==0 ? 'active' : '') %>"><a href="#tab<%= (index + 1) %>" data-toggle="tab"><%= tab[:name] %></a></li>
+      <% end %>
+    </ul>
+    <%= render :partial => 'institution_view' %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  // fix the ridiculous ui that randomly adds and removes tabs
+  if(document.location.hash == '#tab_tab4' && $(".nav-tabs li").length < 4){
+    window.location.hash = ('#tab_tab' + $(".nav-tabs li").length )
+  }
+  tab_jump();
+  add_tab_to_pagination();
+
+</script>
+
+<div class="actions pull-left">
+        <%= link_to '<< Back', :back, :class => "btn", role: "button" %>
+</div>

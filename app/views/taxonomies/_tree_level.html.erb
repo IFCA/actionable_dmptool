@@ -1,0 +1,10 @@
+<% #this takes the nodes on one level of the requirements as the variable requirements %>
+
+<ul>
+	<% children.each { |child| %>
+		<li>
+          <%= link_to(child[:label]) %>
+           <%= render partial: 'tree_level', :locals => { :children => child[:children] } unless child[:children].nil? %>
+		</li>
+	<% } %>
+</ul>

@@ -1,0 +1,134 @@
+<%# this partial requires plan_id, requirement_id to be passed in as a local variable %>
+<%= form_for(@response,  html: { :class => 'form-horizontal' }) do |f| %>
+
+  <%= f.hidden_field :lock_version %>
+
+  <%= render partial: "shared/errors", locals: {model: @response} %>
+  <div class="control-group">
+      <%= f.hidden_field :requirement_id, value: requirement_id %>
+      <%= f.hidden_field :plan_id, value: plan_id %>
+      <%= f.hidden_field :label_id %>
+      <%= f.hidden_field :current_user_id, value: current_user.id %>
+      <%= hidden_field_tag :next_requirement_id, @next_requirement_id %>
+  </div>
+  <% if requirement(requirement_id).requirement_type == :text %>
+    <div class="control-group">
+    		<%= f.label :text_value, 'Your Response', :class => 'hide' %>
+        <%= f.cktext_area :text_value, :class => "input-block-level", :placeholder => "Your Response" %>
+    </div>
+  <% end %>
+
+  <% if requirement(requirement_id).requirement_type == :numeric %>
+    <div class="control-group">
+      <%= f.label :numeric_value, 'Value', :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :numeric_value %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :label_id, 'Unit of Measure', :class => 'control-label' %>
+      <div class="controls">
+        <%= f.select(:label_id, requirement(requirement_id).labels.collect {|l| [ l.desc, l.id ] }) %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if requirement(requirement_id).requirement_type == :date %>
+    <div class="control-group">
+      <%= f.label :date_value, :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :date_value, value: @response.date_value.blank? ? " " : @response.date_value.strftime('%m/%d/%Y'), :class => 'datepicker', id:'response_date_value' %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if requirement(requirement_id).requirement_type == :enum %>
+    <div class="control-group">
+      <%= f.label :enumeration_id, 'Please Select One', :class => 'control-label', :style => 'margin-left: 10px; width: auto' %>
+      <div class="controls" style="margin-left: 100px">
+        <%= f.select(:enumeration_id, requirement(requirement_id).enumerations.collect {|e| [ e.value, e.id ]}, prompt: "Select a value" ) %>
+      </div>
+    </div>
+  <% end %>
+
+
+    <% if requirement(requirement_id).requirement_type == :taxonomy %>
+        <div id="taxonomyTree">
+          <%= render partial: 'responses/taxonomy_tree_level', :locals => { :children => get_concept_tree(@taxonomy.name)} %>
+        </div>
+        <%= f.hidden_field :text_value %>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#taxonomyTree").jstree({
+                    "plugins" : ["themes","ui", "html_data", "types"],
+                    'types': {
+                        'types' : {
+                            'file' : {
+                                'icon' : {
+                                    'image' : '/assets/Green-tag-icon.png'
+                                }
+                            },
+                            'default' : {
+                                'icon' : {
+                                    'image' : '/assets/Green-tag-icon.png'
+                                },
+                                'valid_children' : 'default'
+                            }
+                        }
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                setTimeout(function() {
+                    //alert('timed out');
+                    $('#taxonomyTree a').click(function(event) {
+                        event.preventDefault();
+                    });
+                    // Load node tree selected
+                    $('.jstree-clicked').each(function( index ){
+                        $("#taxonomyTree").jstree("open_node", $('#node'+this.id).parent());
+                    });
+                }, 2000);
+            });
+
+            function taxonomy_submit(){
+                var array = [];
+                $('.jstree-clicked').each(function( index ){
+                    array.push(this.id);
+                });
+                $('#response_text_value').val(array.toString());
+            }
+
+        </script>
+
+        <br/>
+
+        <%= f.submit "Save and Next", onclick: 'taxonomy_submit();' , name: 'save_and_next', :class => 'btn btn-success pull-right', method: 'post', id: 'save_and_next', remote: true %>
+        <%= f.submit "Save Response", onclick: 'taxonomy_submit();' , name: 'save_only', :class => 'btn btn-success pull-right', method: 'post', id: 'save_only', remote: true %>
+        <%= link_to 'Cancel Changes', details_plan_path(@plan), :class => "btn" %>
+
+    <% else %>
+
+
+        <br/>
+
+        <% if requirement(requirement_id).obligation == :mandatory %>
+            <%= f.submit "Save and Next", name: 'save_and_next', :class => 'btn btn-success pull-right', method: 'post', id: 'save_and_next', remote: true %>
+            <%= f.submit "Save Response", name: 'save_only', :class => 'btn btn-success pull-right', method: 'post', id: 'save_only', remote: true %>
+            <%= link_to 'Cancel Changes', details_plan_path(@plan), :class => "btn" %>
+        <% else %>
+            <%= f.submit "Save and Next", name: 'save_and_next', :class => 'btn btn-success pull-right', method: 'post', remote: true  %>
+            <%= f.submit "Save Response", name: 'save_only', :class => 'btn btn-success pull-right', method: 'post', remote: true %>
+            <%= link_to 'Cancel Changes', details_plan_path(@plan), :class => "btn", role: "button" %>
+        <% end %>
+
+    <% end %>
+
+
+  </div>
+<% end %>
+
+<div id="alert_message" title="Please Enter a Valid Response.">
+  Cannot save an empty Response. Please enter a valid Response before continuing.
+</div>

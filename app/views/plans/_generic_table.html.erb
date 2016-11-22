@@ -1,0 +1,79 @@
+<%  # should pass local variable of "plans" and "namespace" and "show_institution"
+    # plans is the collection of plans to show
+    # namespace is a string to add to the front of parameters to keep them separate
+    # show_institution is a boolean that indicates whether the institution column should be shown
+%>
+
+
+
+
+<table class="table table-striped">
+  <thead>
+
+    <tr>
+      <th class="span5"><%= link_to "Plan Title", params.merge({"#{namespace}:order_scope" => "plan"}) %></th>
+      <th class="span5"><%= link_to "Funder Template", params.merge({"#{namespace}:order_scope" => "template"}) %></th>
+      
+      <% if show_institution %>
+        <th class="span5"><%= link_to "Institution", params.merge({"#{namespace}:order_scope" => "institution"}) %></th>
+      <% end %>
+      <th class="span5"><%= link_to "Owner", params.merge({"#{namespace}:order_scope" => "owner"}) %></th>
+      <th>Download</th>
+      <%if namespace == "institutional" %>
+         
+       <th> <%= link_to "Visibility", params.merge({"#{namespace}:order_scope" => "visibility"}) %></th>
+      <%end%>
+    </tr>
+
+</thead>
+<tbody>
+
+
+  <% plans.each do |plan| %>
+    <tr>
+      <td class="plan_name">
+        <div class="toggle-links">
+          <strong><%= plan.name %></strong>
+        </div>
+      </td>
+      <td>
+        <%= (plan.requirements_template && plan.requirements_template.name) || '' %>
+      </td>
+      <% if show_institution %>
+        <td>
+          <%= plan.owner.institution.name %>
+        </td>
+      <% end %>
+      <td>
+        <%= plan.owner.full_name %>
+      </td>
+      <td class="span1">
+        <%= link_to('', plan_path(plan, format: "pdf"), :class => 'icon pdf', :target => '_blank') %>
+      </td>
+      <%unless plan.visibility == :public %>
+        <td>
+          <%= plan.visibility %>
+        </td>
+      <%end%>
+    </tr>
+  <% end %>
+  </tbody>
+  </table>
+
+  <% if params["#{namespace}:all_scope"] == "all" %>
+    <div class="buttons pagination">
+      <%= link_to "View Less", params.merge({"#{namespace}:all_scope" => "less"}),
+                  { :class => "btn" } %>
+      <%= paginate plans, :param_name => "#{namespace}:page" %>
+    </div>
+  <% else %>
+    <div class="buttons pagination">
+      <%= link_to "View All", params.merge({"#{namespace}:all_scope" => "all"}),
+                  { :class => "btn", :id => "#{namespace}_view_all_plans" } %>
+      <%= paginate plans, :param_name => "#{namespace}:page" %>
+    </div>
+  <%end%>
+
+
+
+

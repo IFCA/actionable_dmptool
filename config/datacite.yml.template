@@ -1,0 +1,16 @@
+development:
+  user: xxxxxxxxxxx
+  pass: xxxxxxxxxxx
+  host: xxxx
+  port: 8080
+  post_ws:  /mds/doi
+  metadata_ws:  /mds/metadata
+  institution_prefix:  xx.xxx
+production:
+  user: xxxxxxxxxxxxx
+  pass: xxxxxxxxxxxxx
+  host: xxxxxxxxx
+  port: 8080
+  post_ws:  /mds/doi
+  metadata_ws:  /mds/metadata
+  institution_prefix:  xxxxxxx

@@ -1,0 +1,61 @@
+<% # This partial takes a local plan variable %>
+
+<table>
+
+  <tr>
+    <td><strong>DMP Name:</strong></td>
+    <td><%= plan.name %></td>
+    <td><strong>DOI:</strong></td>
+    <% unless plan.doi.nil? %>
+        <td><%= plan.doi %></td>
+    <% else %>
+        <td></td>
+    <% end %>
+  </tr>
+
+  <tr>
+    <td><strong>DMP Template:</strong></td>
+    <% unless plan.requirements_template.nil? %>
+      <td><%= plan.requirements_template.name %></td>
+    <% else %>
+       <td></td>
+    <% end %>
+    <td><strong>Last Modified Date:</strong></td>
+    <td><%= plan.updated_at.strftime("%B %d, %Y")%></td> 
+  </tr>
+
+  <tr>
+    <td><strong>Owner:</strong></td>
+    <td><%= plan.owner.full_name || "[non specified]" %></td>
+    <td><strong>Co-owner[s]:</strong></td>
+
+    <td>
+      <%if @coowners%>
+        <%= @coowners.map { |coowner| coowner.full_name.to_s }.join(", ") %>
+      <%end%>
+    </td>   
+  </tr>
+
+  <tr>
+  <td><strong>Institution:</strong></td>
+    <% unless plan.owner.nil? %>
+      <td><%= plan.owner.institution.name %></td>
+    <% else %>
+       <td></td>
+    <% end %>
+  <td><strong>Solicitation Number:</strong></td>
+  <td>
+    <%= plan.solicitation_identifier || "[not specified]" %>
+  </td>  
+  </tr>
+
+</table>
+
+<hr/>
+<div class="row-fluid">
+</div>
+<div class="dmp-preview">
+  <%= render(partial: "requirement",
+             collection: (plan.requirements_template.requirements.order(:position).roots),
+             locals: { heading: "" }) %>
+</div>

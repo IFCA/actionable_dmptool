@@ -1,0 +1,12 @@
+<ul>
+	<% children.each { |child| %>
+		<li id="node<%=child[:bdid]%>">
+           <%if(!@response.text_value.nil? && @response.text_value.split(',').include?(child[:bdid].to_s))%>
+              <%= link_to(child[:label], { :controller => 'responses', id: child[:bdid] }, id: child[:bdid], class: 'jstree-clicked' )%>
+           <% else %>
+              <%= link_to(child[:label], { :controller => 'responses', id: child[:bdid]  }, id: child[:bdid] )%>
+           <%end%>
+           <%= render partial: 'responses/taxonomy_tree_level', :locals => { :children => child[:children] } unless child[:children].nil?%>
+        </li>
+	<% } %>
+</ul>

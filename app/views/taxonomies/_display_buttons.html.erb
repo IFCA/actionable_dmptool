@@ -1,0 +1,4 @@
+
+<% if user_role_in?(:dmp_admin) %>
+  	<%= link_to('<< Taxonomies', taxonomies_path, method: :get, :class => "btn pull-left", role: "button") %>
+<%end%>

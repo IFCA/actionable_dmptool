@@ -1,0 +1,50 @@
+<% set_page_history %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= @title_text %>: DMPTool</title>
+    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= favicon_link_tag "favicon.ico" %>
+    <%= csrf_meta_tags %>
+    <%= render 'layouts/shim' %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,400italic' rel='stylesheet'>
+
+    <script>
+    	/* Test for Safari */
+    	if (navigator.userAgent.match(/AppleWebKit/) && ! navigator.userAgent.match(/Chrome/)) {
+    		/* include safari stylesheet*/
+   			document.write('<link rel="stylesheet" media="all" href="/stylesheets/safari.css" />');
+			}
+			/* Test for Chrome */
+			if (navigator.userAgent.match(/Chrome/)) {
+				/* include chrome stylesheet */
+   			document.write('<link rel="stylesheet" media="all" href="/stylesheets/chrome.css" />');
+			}
+    </script>
+    
+
+   
+    <!--[if IE 8]><link rel="stylesheet" media="all" href="/stylesheets/ie.css" /><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" media="all" href="/stylesheets/ie.css" /><![endif]-->
+    <%= render :partial => 'layouts/analytics' %>
+  </head>
+  <body>
+  <%= render 'layouts/header' %>
+
+  <div class="container">
+  	<% if current_user %>
+  		<%= render 'layouts/dashboard_header' unless ['static_pages', 'user_sessions'].include?(controller_name) && !['guidance', 'public_dmps', 'contact'].include?(action_name) %>
+  	<% end %>
+
+    <%= render partial: "shared/flash_messages", flash: flash %>
+
+
+
+    <%= yield %>
+  </div>
+
+  <%= render 'layouts/footer' %>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<% @display_menu = "institution" %>
+<h1 class="row-fluid"><span class="icon administrator"></span>Edit User Roles</h1>
+<div class="tabbable">
+	<ul class="nav nav-tabs">
+		<li class="active"><%= link_to 'User Roles', '#tab1', 'data-toggle' => 'tab' %></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab1">
+				<%= form_tag(update_user_roles_inst_admin_path(user_id: @user.id, anchor: 'tab_tab4'), method: 'post') do %>
+				<p><strong><%= @user.first_name %> Current Roles:</strong></p>
+				<hr/>
+				<div class="control-group">
+					<ul>
+						<% @roles.each do |role| %>
+							<div id=<%="role_#{role.id}"%> >
+						  	<li><%= check_box_tag "role_ids[]", role.id, checked = @user.has_role?(role.id), id: role.id %>
+						    <%= label_tag role.id, role.name, :class => 'checkbox-label' %></li>
+							</div>
+						<% end %>
+					</ul>
+				</div>
+				<br/>
+
+				<div class="buttons" >
+					<%if @user == current_user%>
+						
+							<%= submit_tag 'Save Changes', 
+									class: 'btn btn-green', id: "current_admin_with_alert"%>
+							<%= link_to 'Back', institutions_path( :anchor => 'tab_tab4'), :class => 'btn' %>
+						
+					<%else%>
+						
+							<%= submit_tag 'Save Changes', :anchor => 'tab_tab4',  :class => 'btn btn-green', id: "other_user" %>
+							<%= link_to 'Back', institutions_path( :anchor => 'tab_tab4'), :class => 'btn' %>
+						
+					<%end%>
+				</div>
+
+
+		<%end%>
+		</div>
+	</div>
+</div>

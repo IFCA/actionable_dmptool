@@ -1,0 +1,84 @@
+<% @title_text = "DMP Details" %>
+<% @display_menu = "plans:details" %>
+
+<h1 class="row-fluid"><span class="icon template-details"></span>DMP Details</h1>
+<h2><%= @requirements_template.name %></h2>
+<div class="row-fluid">
+  <div class="details span4">
+    <p>Click on a section below to edit it at any time.</p>
+    <p><span class="icon confirm"></span> = Complete</p>
+    <p><span class="required"> &nbsp;* </span>  &nbsp;&nbsp;= Mandatory</p>
+    <div class="border-box">
+      <p><strong>Template Outline</strong></p>
+      <hr/>
+      <div class="requirements-tree-view">
+        <%= render partial: 'shared/requirements_tree', locals: { requirements: @requirements.roots } %>
+      </div>
+    </div>
+  </div>
+  <div class="tabbable span8">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab1" data-toggle="tab">Instructions</a></li>
+
+      <% unless @url_resources.empty? && @requirement.global_resources.actionable_url.empty? && @requirement.template_resources.actionable_url.empty? && @requirement.requirement_resources.actionable_url.empty? && @requirement.template_customization_resources(current_user.institution_id).actionable_url.empty? && @requirement.institution_customization_resources(current_user.institution_id).actionable_url.empty? %>
+          <li><a href="#tab2" data-toggle="tab">Links</a></li>
+      <% end %>
+
+      <% unless @suggested_resources.empty? && @requirement.global_resources.suggested_response.empty? && @requirement.template_resources.suggested_response.empty? && @requirement.requirement_resources.suggested_response.empty? && @requirement.template_customization_resources(current_user.institution_id).suggested_response.empty? && @requirement.institution_customization_resources(current_user.institution_id).suggested_response.empty? %>
+          <li><a href="#tab3" data-toggle="tab">Suggested Response</a></li>
+      <% end %>
+
+      <% unless @example_resources.empty? && @requirement.global_resources.example_response.empty? && @requirement.template_resources.example_response.empty? && @requirement.requirement_resources.example_response.empty? && @requirement.template_customization_resources(current_user.institution_id).example_response.empty? && @requirement.institution_customization_resources(current_user.institution_id).example_response.empty? %>
+          <li><a href="#tab4" data-toggle="tab">Example Response</a></li>
+      <% end %>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab1">
+        <%= render partial: 'guidance', locals: { requirement_id: params[:requirement_id] } %>
+      </div>
+      <div class="tab-pane" id="tab2">
+        <%= render partial: 'actionable_url', locals: { requirement_id: params[:requirement_id] } %>
+      </div>
+      <div class="tab-pane " id="tab3">
+        <%= render partial: 'suggested_response', locals: { requirement_id: params[:requirement_id] } %>
+      </div>
+      <div class="tab-pane" id="tab4">
+        <%= render partial: 'example_response', locals: { requirement_id: params[:requirement_id] } %>
+      </div>
+
+      <br/>
+      <fieldset>
+        <!-- <strong style="color:#516935; margin-left: 1em;"> Your Response </strong> -->
+        <% if @requirement.obligation == :mandatory %>
+          <strong style="margin-left: 10px;">(Mandatory)</strong>
+        <% end %>
+        <%= render partial: 'responses/form', locals: { requirement_id: params[:requirement_id], plan_id: @plan.id } %>
+      </fieldset>
+    </div>
+  </div>
+  <div>
+    <% referer_action %>
+    <% if (@referer_url[:controller] == 'plans' && @referer_url[:action] == 'new') || (@referer_url[:controller] == 'plans' && @referer_url[:action] == 'copy_existing_template') %>
+      <%= link_to '<< Back', edit_plan_path(@plan),  method: 'get', :class => 'btn btn-green pull-left', role: "button" %>
+    <% else %>
+      <%= link_to '<< Back', :back,  method: 'get', :class => 'btn btn-green pull-left', role: "button" %>
+    <% end %>
+    <%= link_to 'DMP Preview >>', preview_plan_path(@plan),  method: 'get', :class => 'btn btn-green pull-right', role: "button" %>
+  </div>
+</div>
+<script type="text/javascript">
+  tab_jump();
+  add_tab_to_pagination();
+</script>
+<script type="text/javascript">
+  function fixed_size(id, pixels){
+    document.getElementById(id).style.height = pixels + 'px';
+    //$j('#'+id).css('height', pixels + 'px');
+  }
+
+  function full_size(id){
+    document.getElementById(id).style.height = 'auto';
+    //$j('#'+id).css('height', 'auto');
+  }
+</script>

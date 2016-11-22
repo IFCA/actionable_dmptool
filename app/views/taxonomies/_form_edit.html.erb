@@ -1,0 +1,107 @@
+<% @title_text = "Taxonomy Overview" %>
+<h1 class="row-fluid"><span class="icon resource-template"></span>Taxonomy Overview</h1>
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">Basic Information</a></li>
+    <li class="inactive"><a href="#tab2" data-toggle="tab">Upload Taxonomy File</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+      <%= form_for @taxonomy, html:{ :class => 'form-horizontal', multipart: true}  do |f| %>
+
+          <%= render partial: "shared/errors", locals: {model: @taxonomy } %>
+
+
+          <div class="control-group">
+            <%= f.label :name , "Taxonomy Name", :class=> "control-label " %>
+            <div class="controls">
+              <%= f.text_field :name, :class => "input-xxlarge", readonly: true%>
+              <%= content_tag(:span, '', :title => 'This field cannot be edited.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :description, 'Description',:class=> "control-label " %>
+            <div class="controls">
+              <%= f.text_field :description, :class => "input-xlarge" %>
+              <%= content_tag(:span, '', :title => 'Description of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :url, 'URL ',:class=> "control-label " %>
+            <div class="controls">
+              <%= f.text_field :url, :class => "input-xxlarge" %>
+              <%= content_tag(:span, '', :title => 'URL of taxonomy. Example: http://gcmdservices.gsfc.nasa.gov/static/kms/sciencekeywords/sciencekeywords.rdf', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :namespace, 'Namespace ',:class=> "control-label required" %>
+            <div class="controls">
+              <%= f.text_field :namespace, :class => "input-xxlarge", required:true %>
+              <%= content_tag(:span, '', :title => 'Namespace of taxonomy. Example: http://gcmdservices.gsfc.nasa.gov/static/kms/instruments#', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :prefLabel, 'Preferred label ',:class=> "control-label required" %>
+            <div class="controls">
+              <%= f.text_field :prefLabel, :class => "input-large", required:true %>
+              <%= content_tag(:span, '', :title => 'Preferred label of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :property, 'Property ',:class=> "control-label required"%>
+            <div class="controls">
+              <%= f.text_field :property, :class => "input-large", required:true  %>
+              <%= content_tag(:span, '', :title => 'Property of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+
+          <div class="control-group">
+            <p class ="control-label">Creation Date</p>
+            <div class="controls">
+              <p><%= (@taxonomy.created_at.nil? ? 'none' : @taxonomy.created_at) %></p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <p class ="control-label">Last Modification Date</p>
+            <div class="controls">
+              <p><%= (@taxonomy.updated_at.nil? ? 'none' : @taxonomy.updated_at) %></p>
+            </div>
+          </div>
+          <div class="buttons">
+            <%= f.submit('Save') %>
+          </div>
+          <%= hidden_field_tag :after_save, 'this_page' %>
+      <% end %>
+	</div>
+    <!-- Subir fichero -->
+    <div class="tab-pane inactive" id="tab2">
+      <%= form_for @taxonomy, html:{ :class => 'form-horizontal' , multipart: true}  do |f| %>
+
+          <%= render partial: "shared/errors", locals: {model: @taxonomy } %>
+
+
+          <div class="control-group">
+
+            <%= f.label :url, 'Taxonomy File', :class => "control-label"  %>
+
+            <div class="controls">
+              <%= f.file_field :url, :onchange =>"validateFilesTax(this);" %>
+              <%= content_tag(:span, '', :title => 'Taxonomy can be in .rdf or .ttl format.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <%= f.submit "Upload", :class => "btn" %>
+          </div>
+          <%= hidden_field_tag :after_save, 'this_page' %>
+      <% end %>
+    </div>
+  </div>
+</div>

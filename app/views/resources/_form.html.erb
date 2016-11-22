@@ -1,0 +1,41 @@
+  <%= form_for @resource, html: { :class => 'form-horizontal' } do |f| %>
+    <%= render partial: "shared/errors", locals: {model: @resource } %>
+
+    <fieldset>
+      <div class="control-group">
+        <%= f.label :resource_type, "Resource Type", :class => "control-label" %>
+        <div class="controls">
+          <%= f.select :resource_type,
+          		options_for_select([['Links', :actionable_url], ['Guidance', :help_text], ['Example Response', :example_response], ['Suggested Response', :suggested_response]], @resource.resource_type) %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :details, "Details", :class => "control-label", id: "text_details" %>
+        <div class="controls">
+          <%= f.text_area :text, size: "20x10",placeholder: "Enter the text", :class => "input-xlarge" %>
+        </div>
+      </div>
+
+
+      <div class="control-group">
+        <%= f.label :details, "Details", :class => "control-label", id: "value_details" %>
+        <div class="controls">
+          <%= f.text_field :label, placeholder: "URL Label", :class => "input-xlarge" %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <%= f.text_field :value, placeholder: "URL", :class => "input-xlarge" %>
+        </div>
+      </div>
+
+      <div class="actions pull-right">
+        <%= f.submit 'Save Changes', :class => "btn" %>
+        <%= button_tag 'Cancel', type: :reset, :class => "btn" %>
+        <%= link_to 'Delete Resource', @resource, :method => :delete,
+        data: { confirm: 'Are you sure?' }, :class => "btn" %>
+      </div>
+    </fieldset>
+  <% end %>

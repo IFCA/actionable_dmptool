@@ -1,0 +1,70 @@
+<% @title_text = "Taxonomy Overview" %>
+<h1 class="row-fluid"><span class="icon resource-template"></span>Taxonomy Overview</h1>
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">Basic Information</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+      <%= form_for @taxonomy, html:{ :class => 'form-horizontal', multipart: true}  do |f| %>
+
+          <%= render partial: "shared/errors", locals: {model: @taxonomy } %>
+
+
+          <div class="control-group">
+            <%= f.label :name , "Taxonomy Name", :class=> "control-label required" %>
+            <div class="controls">
+              <%= f.text_field :name, :class => "input-xxlarge ", readonly: false, required:true%>
+              <%= content_tag(:span, '', :title => 'This field cannot be edited.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :description, 'Description',:class=> "control-label " %>
+            <div class="controls">
+              <%= f.text_field :description, :class => "input-xlarge" %>
+              <%= content_tag(:span, '', :title => 'Description of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :url, 'URL ',:class=> "control-label " %>
+            <div class="controls">
+              <%= f.text_field :url, :class => "input-xxlarge" %>
+              <%= content_tag(:span, '', :title => 'URL of taxonomy. Example: http://gcmdservices.gsfc.nasa.gov/static/kms/sciencekeywords/sciencekeywords.rdf', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :namespace, 'Namespace',:class=> "control-label required" %>
+            <div class="controls">
+              <%= f.text_field :namespace, :class => "input-xxlarge", required:true %>
+              <%= content_tag(:span, '', :title => 'Namespace of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :prefLabel, 'Preferred label',:class=> "control-label required" %>
+            <div class="controls">
+              <%= f.text_field :prefLabel, :class => "input-large", required:true %>
+              <%= content_tag(:span, '', :title => 'Preferred label of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <%= f.label :property, 'Property',:class=> "control-label required" %>
+            <div class="controls">
+              <%= f.text_field :property, :class => "input-large", required:true %>
+              <%= content_tag(:span, '', :title => 'Property of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+            </div>
+          </div>
+
+
+          <div class="buttons">
+            <%= f.submit('Save') %>
+          </div>
+          <%= hidden_field_tag :after_save, 'this_page' %>
+      <% end %>
+	</div>
+  </div>
+</div>

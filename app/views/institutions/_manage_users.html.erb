@@ -1,0 +1,79 @@
+<table class ="table table-striped">
+	<div class="table-scope">
+		<%= link_to "All(#{@all})", 
+				institutions_path(anchor: 'tab_tab4', scope: "all"), :class => "all_limited" %> 
+		| 
+		<%= link_to "Resources Editors(#{@resources_editor})",
+								institutions_path(anchor: 'tab_tab4', scope:  "resources_editor"), :class => "resources_editor"  %> 
+		| 
+		<%= link_to "Template Editors(#{@template_editor})", 
+								institutions_path(anchor: 'tab_tab4', scope: "template_editor"), 
+								:class => "template_editor" %> 
+		| 
+		<%= link_to "Institutional Administrators(#{@institutional_administrator})" , 
+							institutions_path(anchor: 'tab_tab4', scope: "institutional_administrator"), :class => "institutional_administrator" %> 
+		| 
+		<%= link_to "Institutional Reviewers(#{@institutional_reviewer})",  
+								institutions_path(anchor: 'tab_tab4', scope: "institutional_reviewer"), :class => "institutional_reviewer" %>
+		|
+		<%= link_to "DMP Administrators(#{@dmp_administrator})",  
+								institutions_path(anchor: 'tab_tab4', scope: "dmp_administrator"), :class => "dmp_administrator" %>
+	</div>
+		<thead>
+		  <tr>
+		    <th>User Name</th>
+		    <th>Institution</th>
+		    <th>Current Role
+				<%= content_tag(:span, '', :title => 'Possible roles are:<ul><li>Template editor: create local, institutional, DMP templates</li><li>Resources editor: add/modify DMP template customizations, which include links to resources, local help text, suggested text, and example responses</li><li>Institutional reviewer: review, informally or formally, data management plans</li><li>Institutional administrator: assign additional DMPTool institutional administrators; performs all above administrative roles</li></ul>', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+		    </th>
+		    <th width="span1">Edit User Role</th>
+		  </tr>
+		</thead>
+		<tbody>
+			<% @users.each do |user| %>     
+		  	<tr class='user_row' id=<%="user_#{user.id}"%>> 
+		  		<% if user_role_in?(:dmp_admin) %>       
+		  			<td><%= link_to user.full_name_last_first, edit_user_path(user) %></td>
+		  		<%else%>
+		  			<td><%= user.full_name_last_first%></td>
+		  		<%end%>
+		    	<!-- <td><%#= link_to user.institution.full_name, edit_institution_path(user.institution, acr: "tab4") %></td> -->
+		    	<td><%= user.institution.full_name %></td>
+		    	<td><%= user.role_names.join(' | ') %></td>
+		     	<td class="span1"><%=link_to raw(''), edit_user_roles_inst_admin_path(user_id: user), :title => 'Edit user role', :class => 'icon edit-user', :id => "edit_#{user.id}"%></td>           
+		      </tr>       
+		  <% end %>
+		</tbody>
+</table>
+<%= form_tag(add_authorization_manage_users_path(anchor: 'tab_tab4'), method: 'post') do %>
+<table class ="table">
+	<tr class="user_row">  
+		<td class="span7">
+			<div class="control-group">
+				<%= render partial: '/users/user_autocomplete_widget',
+				:locals =>
+					       {  user_role: 'template_editor',
+					          #submit_text: 'Add As Template Editor',
+					          submit_text: 'Grant Role',
+					          submit_url: add_authorization_manage_users_path( anchor: 'tab_tab4'),
+					          role_number: Role::TEMPLATE_EDITOR,
+					          
+					          item_description: 'template editor'
+					       }
+				%>
+			</div>
+		</td>
+		<td class="span5">
+			<div class="control-group row-fluid">
+						<% @roles.each do |role| %>
+						  <div class="controls span6">
+						  	<%= check_box_tag "role_ids[]", role.id , checked = false, id: role.id%>
+						    <%= label_tag role.id, role.name, :class => 'checkbox-label' %>
+						  </div>
+						<% end %>
+				</div>
+		</td>
+	 </tr>
+</table>
+<%end%>
+	

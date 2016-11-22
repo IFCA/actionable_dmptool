@@ -1,0 +1,38 @@
+// Place all the styles related to the customizations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+p.cust_label {
+  font-weight: bold;
+}
+
+p.cust_text {
+  margin: 0 0 20px 20px;
+}
+
+p.cust_link {
+  margin: 0 0 15px 0;
+}
+
+h2.cust {
+  margin-top: 1.5em;
+  font-weight: bold;
+  clear:both;
+}
+
+div.cust_text_full {
+  margin: 0 0 15px 20px;
+  display: none;
+}
+
+div.editable_resource {
+  clear: left;
+  float: left;
+  width: 560px;
+}
+
+div.edit_icon_right {
+  clear: right;
+  float: left;
+  width: 32px;
+}
