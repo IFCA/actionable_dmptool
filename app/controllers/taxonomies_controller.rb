@@ -212,10 +212,10 @@ end
   def load_concepts
     graph = RDF::Graph.load(@taxonomy.url)
     # cargamos el RDF en un mapa
-    map = to_map graph
+    map = to_map3 graph
 
     if map.blank?
-      map = to_map2 graph
+      map = to_map3 graph
     end
 
     #Vaciamos la tabla asociada a la taxonomia
@@ -235,6 +235,7 @@ end
 
   def to_map (graph)
     #Query para separar cada uno de los conceptos
+    logger.error("Fer was here")
     query = RDF::Query.new({:aux => {RDF.type  => RDF::SKOS.Concept,
                                      RDF::SKOS.prefLabel => :label}})
     map = Hash.new
@@ -287,6 +288,8 @@ end
       mapAux = Hash.new
       id = element.aux.to_s
       label = element.label.to_s
+      logger.error("Fer label #{label}")
+      logger.error("Fer NAMESPACE #{@taxonomy.namespace}")
       mapAux[:id]=id
       mapAux[:label]=label
       mapAux[:description]=label
@@ -294,6 +297,83 @@ end
     end
 
     return map
+  end
+
+  def to_map3 (graph)
+    logger.error("entro EN MAP 3")
+    #Get the URL introduced by the user
+    map = Hash.new
+
+    logger.error("Fer prefLabel? #{@taxonomy.prefLabel}")
+    logger.error("Fer property? #{@taxonomy.property}")
+    logger.error("Fer description? #{@taxonomy.description}")
+    logger.error("Fer parent? #{@taxonomy.namespace}")
+
+    #Query for getting ID and label
+    query = RDF::Query.new({
+      :object => {
+         RDF::URI(@taxonomy.prefLabel) => :name,
+         RDF::URI(@taxonomy.property) => :id
+      }
+    })
+
+    query.execute(graph) do |element|
+      logger.error("Fer Element\n")
+      mapAux = Hash.new
+      id = element.object.to_s
+      label = element.name.to_s
+      logger.error("Fer label #{label}\n")
+      logger.error("Fer ID #{id}\n")
+      logger.error("Fer----------------\n")
+      mapAux[:id]=id
+      mapAux[:label]=label
+      map[id] = mapAux
+
+    end
+
+    #Query for getting parent
+    query = RDF::Query.new({
+      :object => {
+         RDF::URI(@taxonomy.property) => :id,
+         RDF::URI(@taxonomy.namespace) => :parent
+      }
+    })
+
+    query.execute(graph) do |element|
+      logger.error("Fer Element\n")
+      mapAux = Hash.new
+      id = element.object.to_s
+      parent = element.parent.to_s
+      logger.error("Fer Parent #{parent}\n")
+      logger.error("Fer ID #{id}\n")
+      logger.error("Fer----------------\n")
+      mapAux = map[id][:parent] = parent
+
+    end
+
+    #Query for getting description
+    query = RDF::Query.new({
+      :object => {
+         RDF::URI(@taxonomy.property) => :id,
+         RDF::URI(@taxonomy.description) => :description
+      }
+    })
+
+    query.execute(graph) do |element|
+      logger.error("Fer Element\n")
+      mapAux = Hash.new
+      id = element.object.to_s
+      description = element.description.to_s
+      logger.error("Fer ID #{id}\n")
+      logger.error("Fer desc: #{description}")
+      logger.error("Fer----------------\n")
+      mapAux = map[id][:description] = description
+
+    end
+
+
+    return map 
+
   end
 
 
