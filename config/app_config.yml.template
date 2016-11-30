@@ -1,0 +1,55 @@
+development:
+  rss:                    https://blog.dmptool.org/feed
+  blog:                   http://blog.dmptool.org
+  feedback_email_to:      [pwillet.ucop.edu, mstrong@ucop.edu, sfisher@ucop.edu]
+  feedback_email_from:    no-reply-dmptool@ucop.edu
+  recaptcha_public_key:   
+  recaptcha_private_key:  
+  google_analytics_key:   
+  google_analytics_host:  cdlib.org
+  host_for_email_links:   https://dmp2-dev.cdlib.org
+
+development_nonlocal:
+  development
+
+stage:
+  rss:                    https://blog.dmptool.org/feed
+  blog:                   http://blog.dmptool.org
+  feedback_email_to:      [uc3@ucop.edu]
+  feedback_email_from:    no-reply-dmptool@ucop.edu
+  recaptcha_public_key:   
+  recaptcha_private_key:  
+  google_analytics_key:   
+  google_analytics_host:  cdlib.org
+  host_for_email_links:   https://dmp2-staging.cdlib.org
+
+stage_development:
+  stage
+
+production:
+  rss:                    https://blog.dmptool.org/feed
+  blog:                   http://blog.dmptool.org
+  feedback_email_to:      [uc3@ucop.edu]
+  feedback_email_from:    no-reply-dmptool@ucop.edu
+  recaptcha_public_key:   
+  recaptcha_private_key:  
+  google_analytics_key:   
+  google_analytics_host:  dmptool.org
+  host_for_email_links:   https://dmptool.org
+
+production_development:
+  production
+
+
+test:
+  rss:                    https://blog.dmptool.org/feed
+  blog:                   http://blog.dmptool.org
+  feedback_email_to:      [pwillet.ucop.edu, mstrong@ucop.edu]
+  feedback_email_from:    no-reply-dmptool@ucop.edu
+  recaptcha_public_key:   
+  recaptcha_private_key:  
+  google_analytics_key:   ""
+  google_analytics_host:  ""
+
+test_nonlocal:
+  development
