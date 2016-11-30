@@ -24,7 +24,7 @@
             <%= f.label :description, 'Description',:class=> "control-label " %>
             <div class="controls">
               <%= f.text_field :description, :class => "input-xlarge" %>
-              <%= content_tag(:span, '', :title => 'Description of taxonomy.', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+              <%= content_tag(:span, '', :title => 'URL for description. Example: http://www.w3.org/2004/02/skos/core#definition', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
             </div>
           </div>
 
@@ -37,10 +37,10 @@
           </div>
 
           <div class="control-group">
-            <%= f.label :namespace, 'Namespace ',:class=> "control-label required" %>
+            <%= f.label :namespace, 'Parent ',:class=> "control-label required" %>
             <div class="controls">
               <%= f.text_field :namespace, :class => "input-xxlarge", required:true %>
-              <%= content_tag(:span, '', :title => 'Namespace of taxonomy. Example: http://gcmdservices.gsfc.nasa.gov/static/kms/instruments#', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
+              <%= content_tag(:span, '', :title => 'Parent. Example: http://www.w3.org/2004/02/skos/core#broader', 'data-toggle' => 'tooltip', 'data-placement' => 'right', 'data-html' => 'true', :class => 'icon questionmark tip') %>
             </div>
           </div>
 
