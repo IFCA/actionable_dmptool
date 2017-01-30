@@ -86,6 +86,7 @@ GEM
     ckeditor (4.0.11)
       mime-types
       orm_adapter (~> 0.5.0)
+    connection_pool (2.2.1)
     deep_cloneable (2.0.2)
       activerecord (>= 3.1.0, < 5.0.0)
     diff-lcs (1.2.5)
@@ -135,7 +136,10 @@ GEM
     mini_portile (0.6.2)
     minitest (4.7.5)
     multi_json (1.10.1)
+    multipart-post (2.0.0)
     mysql2 (0.3.18)
+    net-http-persistent (3.0.0)
+      connection_pool (~> 2.2)
     net-ldap (0.3.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -284,10 +288,13 @@ DEPENDENCIES
   ifad-rtf!
   jquery-rails (~> 3.1.0)
   jquery-ui-rails (~> 4.2.1)
+  json
   kaminari (~> 0.16.3)
   launchy
   mini_magick
+  multipart-post
   mysql2
+  net-http-persistent
   omniauth-ldap
   omniauth-shibboleth!
   paranoia!

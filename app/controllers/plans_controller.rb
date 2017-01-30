@@ -1,4 +1,10 @@
 class PlansController < ApplicationController
+  require 'net/http'
+  require 'rubygems'
+  require 'json'
+  require 'uri'
+  require 'openssl'
+  require 'net/http/post/multipart'
 
   before_action :require_login, except: [:public, :show]
   before_action :set_user
@@ -632,6 +638,77 @@ class PlansController < ApplicationController
 
 
     send_data((@rdf_file_header + @rdf_file), :filename => @plan['name'] + ".rdf");
+
+  end
+  
+  def submit_portal
+    @plan = Plan.find(params[:id])
+
+    @rdf_file_header = "<?xml version=\"1.0\"?>\n";
+    @rdf_file_header += "<rdf:RDF\n";
+    @rdf_file_header += "    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n";
+    @rdf_file_header += "    xmlns:dcterms=\"http://purl.org/dc/terms/\"\n";
+    @rdf_file_header += "    xmlns:fabio=\"http://purl.org/spar/fabio/\"\n";
+    @rdf_file_header += "    xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"\n";
+
+    @rdf_file = "    <fabio:DataMangementPlan rdf:about=\"#{request.protocol}#{request.host_with_port}/plans/" + params[:id] + "\">\n";
+    @rdf_file += "        <dcterms:title>" + @plan['name'] + "</dcterms:title>\n";
+
+    if !@plan['doi'].nil? and !@plan['doi'].empty? then
+      @rdf_file += "        <prism:doi>" + @plan['doi'] + "</prism:doi>\n";
+    end
+
+    @rdf_file += "        <fabio:hasURL rdf:datatype=\"http://www.w3.org/2001/XMLSchema#anyURI\">#{request.protocol}#{request.host_with_port}/plans/" + params[:id] + ".pdf</fabio:hasURL>\n"
+
+    @rdf_file += "        <dcterms:creator>\n";
+    if !@plan.owner['orcid_id'].nil? and !@plan.owner['orcid_id'].empty? then
+      @rdf_file += "            <foaf:Person rdf:about=\"" + @plan.owner['orcid_id'] + "\">\n";
+    else
+      @rdf_file += "            <foaf:Person>\n";
+    end
+    @rdf_file += "                <foaf:givenName>" + @plan.owner['first_name'] + "</foaf:givenName>\n";
+    @rdf_file += "                <foaf:familyName>" + @plan.owner['last_name'] + "</foaf:familyName>\n";
+    @rdf_file += "            </foaf:Person>\n";
+    @rdf_file += "        </dcterms:creator>\n";
+
+    @plan.coowners.each do |coowner|
+      @rdf_file += "        <dcterms:creator>\n";
+      if !coowner['orcid_id'].nil? and !coowner['orcid_id'].empty? then
+        @rdf_file += "            <foaf:Person rdf:about=\"" + coowner['orcid_id'] + "\">\n";
+      else
+        @rdf_file += "            <foaf:Person>\n";
+      end
+      @rdf_file += "                <foaf:givenName>" + coowner['first_name'] + "</foaf:givenName>\n";
+      @rdf_file += "                <foaf:familyName>" + coowner['last_name'] + "</foaf:familyName>\n";
+      @rdf_file += "            </foaf:Person>\n";
+      @rdf_file += "        </dcterms:creator>\n";
+    end
+
+    @requirements = Requirement.where(requirements_template_id: @plan['requirements_template_id'], requirement_type: "taxonomy");
+    @requirements.each do |req|
+      @taxonomy = Taxonomy.find(req['taxonomy_id']);
+      @rdf_file_header += "    xmlns:" + @taxonomy['prefLabel'] + "=\"" + @taxonomy['namespace'] + "\"\n";
+      @responses = Response.where(requirement_id: req['id'], plan_id: @plan['id'])
+      @responses.each do |res|
+        @res_text = (res['text_value']).split(',');
+        @res_text.each do |resId|
+          @concept = Viaconcept.find(resId);
+          @rdf_file += "        <" + @taxonomy['prefLabel'] + ":" + @taxonomy['property'] + " rdf:resource=\"" + @concept['identifier'] + "\"/>\n";
+        end
+      end
+    end
+
+    @rdf_file += "    </fabio:DataMangementPlan>\n";
+    @rdf_file += "</rdf:RDF>";
+
+
+    @rdf_file_header += "    xmlns:prism=\"http://prismstandard.org/namespaces/basic/3.0/\">\n";
+    @rdf_file_header += "\n ";
+
+
+    #send_data((@rdf_file_header + @rdf_file), :filename => @plan['name'] + ".rdf");
+
+       
 
   end
 

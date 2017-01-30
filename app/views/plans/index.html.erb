@@ -76,6 +76,7 @@
               <br><%= link_to('Export as PDF', plan_path(plan, :format => "pdf")) %>
               | <%= link_to('Export as RTF', plan_path(plan, :format => "rtf")) %>
               | <%= link_to('Export as RDF', {:controller=>"plans", :action=>"export_rdf", :id=>plan.id}) %>
+              | <%= link_to('Submit to Data Portal', {:controller=>"plans", :action=>"submit_portal", :id=>plan.id}) %>
               <% if plan.doi.nil? %>
               | <%= link_to('Generate DOI', doi_plan_path(@plan_id)) %>
               <%end%>

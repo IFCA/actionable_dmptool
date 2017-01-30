@@ -55,3 +55,7 @@ gem 'rdf-rdfxml'
 gem 'rdf-turtle'
 
 gem "bcrypt-ruby", :require => "bcrypt"
+
+gem 'json'
+gem 'multipart-post'
+gem 'net-http-persistent'

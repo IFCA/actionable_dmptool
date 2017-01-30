@@ -7,6 +7,8 @@
 config/database.yml
 config/ldap.yml
 config/shibboleth.yml
+config/datacite.yml
+config/app_config.yml
 *.old
 .DS_Store?
 ._*
