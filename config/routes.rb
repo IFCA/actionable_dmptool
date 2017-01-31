@@ -138,7 +138,7 @@ Dmptool2::Application.routes.draw do
   delete 'delete_coowner', to: 'plans#delete_coowner'
   post 'reject_with_comments', to: 'plan_states#reject_with_comments'
   get 'plans/export_rdf/:id', to: 'plans#export_rdf'
-  get 'plans/submit_portal/:id', to: 'plans#submit_portal'
+  get 'plans/submit_portal/:id', to: 'plans#public' 
 
   get  'remove_resource_editor_role', to: 'resource_templates#remove_resource_editor_role'
   get  'remove_requirements_editor_role', to: 'requirements_templates#remove_requirements_editor_role'

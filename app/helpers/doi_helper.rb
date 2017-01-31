@@ -25,7 +25,8 @@ module DoiHelper
 		doi_id = "#{DATACITE_CONFIG['institution_prefix']}/#{plan_id}"
 		data = "doi=#{doi_id}\nurl=#{url}"
 		req.body = data
-		response = Net::HTTP.new(DATACITE_CONFIG['host'], DATACITE_CONFIG['port']).start {|http| http.request(req) }
+		logger.error("Fer label #{DATACITE_CONFIG['post_ws']}")
+                response = Net::HTTP.new(DATACITE_CONFIG['host'], DATACITE_CONFIG['port']).start {|http| http.request(req) }
 		return doi_id
 	end
 

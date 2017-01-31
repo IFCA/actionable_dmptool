@@ -2,10 +2,13 @@ class PlansController < ApplicationController
   require 'net/http'
   require 'rubygems'
   require 'json'
-  require 'uri'
+  #require 'uri'
   require 'openssl'
   require 'net/http/post/multipart'
 
+  #Temporal (Unsecure SSL)
+  OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+   
   before_action :require_login, except: [:public, :show]
   before_action :set_user
   #note show will need to be protected from logins in some cases, but only from non-public plan viewing
@@ -18,7 +21,7 @@ class PlansController < ApplicationController
   before_action :set_cache_buster, only: [:show]
 
   include DoiHelper
-
+  include DataPortalHelper
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -707,9 +710,9 @@ class PlansController < ApplicationController
 
 
     #send_data((@rdf_file_header + @rdf_file), :filename => @plan['name'] + ".rdf");
-
-       
-
+    @plan.doi = submit_dmp_dataportal(@plan) #TODO temporary saved on doi param
+    send_file_dataportal((@rdf_file_header + @rdf_file),@plan.doi)
+    publish_dmp_dataportal(@plan.doi)
   end
 
   private
